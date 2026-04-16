@@ -1,32 +1,43 @@
 let currentState = welcoming;
+let selectedService = '';
 
 export function handleInput(sInput) {
   return currentState(sInput);
 }
 
 export function clearInput(){
-  currentState = welcoming;  
+  currentState = welcoming;
+  selectedService = '';
 }
 
 function welcoming() {
   let aReturn = [];
-  currentState = reserving;
-  aReturn.push("Welcome to Rich's Acton Rapid Test.");
-  aReturn.push("Would you like to reserve a rapid test kit?");
+  currentState = selectingService;
+  aReturn.push("Welcome to Darryl's Cuts!");
+  aReturn.push("What can we do for you today? Try: Buzz Cut, 1 Blade, Regular Cut, or Beard Trim.");
   return aReturn;
 }
 
-function reserving(sInput) {
+function selectingService(sInput) {
   let aReturn = [];
-  currentState = welcoming
+  selectedService = sInput;
+  currentState = upselling;
+  aReturn.push(`Great choice — a ${sInput} it is!`);
+  aReturn.push("Would you like to add a shampoo treatment for just $8?");
+  return aReturn;
+}
+
+function upselling(sInput) {
+  let aReturn = [];
+  currentState = welcoming;
   if (sInput.toLowerCase().startsWith('y')) {
-    aReturn.push(`Your rapid test is reserved`);
+    aReturn.push(`Perfect! Your ${selectedService} + shampoo treatment is all booked.`);
     let d = new Date();
-    d.setMinutes(d.getMinutes() + 120);
-    aReturn.push(`Please pick it up at 123 Tidy St., Acton before ${d.toTimeString()}`);
+    d.setMinutes(d.getMinutes() + 30);
+    aReturn.push(`We'll see you soon. Thanks for choosing Darryl's Cuts!`);
   } else {
-    aReturn.push("Thanks for trying our reservation system");
-    aReturn.push("Maybe next time");
+    aReturn.push(`No problem! Your ${selectedService} is booked.`);
+    aReturn.push("See you soon at Darryl's Cuts!");
   }
   return aReturn;
 }
